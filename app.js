@@ -15,7 +15,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 mongoose
-  .connect(process.env.MONGODB_URI + process.env.DB_NAME, {
+  .connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -39,7 +39,6 @@ app.use(
   session({
     store: new MongoStore({
       mongoUrl: process.env.MONGODB_URI,
-      dbName: process.env.DB_NAME,
       collectionName: "sessions",
       autoRemove: "interval",
       autoRemoveInterval: 10,
