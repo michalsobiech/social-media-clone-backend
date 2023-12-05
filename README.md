@@ -1,3 +1,5 @@
+[Go to the SMC frontend repo](https://github.com/michalsobiech/social-media-clone-frontend)
+
 # Social media clone (Backend)
 
 A **Social media clone** is a MERN stack web application.
@@ -16,34 +18,19 @@ The goal of the project is to create a web app with fundamental social media fea
 
 ## Installation
 
-> When I write this I have installed node.js v18.16.0 and npm v9.6.6
-
-Clone the repository
-
+1. Clone the repository
 ```
-git clone https://github.com/michalsobiech/social-media-clone.git
+git clone https://github.com/michalsobiech/social-media-clone-backend.git
 ```
 
-To install both client and server side use this command 
-
+2. Install packages
 ```
-npm run install-all
+npm install
 ```
 
-To run both the client and server in development mode, use:
-
+3. Start dev server
 ```
 npm run dev
-```
-
-If you want to only run one of them, use these commands:
-
-```
-npm run dev:client
-```
-
-```
-npm run dev:server
 ```
 
 ## Tech Stack
