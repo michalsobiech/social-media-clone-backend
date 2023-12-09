@@ -1,4 +1,4 @@
-import express from "express";
+import { type Request, type Response, type NextFunction } from "express";
 import { createLogger, format, transports } from "winston";
 import APIError from "../utils/APIError.js";
 
@@ -18,13 +18,12 @@ const logger = createLogger({
   transports: [new transports.Console()],
 });
 
-/**
- * @param {APIError} error
- * @param {express.Request} req
- * @param {express.Response} res
- * @param {express.NextFunction} next
- */
-export default function (error, req, res, next) {
+export default function (
+  error: APIError,
+  req: Request,
+  _res: Response,
+  next: NextFunction
+) {
   if (process.env.NODE_ENV !== "production") {
     console.log(error);
     next(error);

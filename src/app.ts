@@ -1,6 +1,10 @@
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
-import express from "express";
+import express, {
+  type Request,
+  type Response,
+  type Application,
+} from "express";
 import session from "express-session";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRouter from "./routes/authRouter.js";
@@ -11,7 +15,7 @@ import logger from "./middlewares/logger.js";
 
 dotenv.config();
 
-const app = express();
+const app: Application = express();
 const port = process.env.PORT || 5000;
 
 mongoose
@@ -56,7 +60,7 @@ app.use(
 
 app.use("/api/auth", authRouter);
 
-app.use((req, res) => {
+app.use((req: Request, res: Response) => {
   res.status(NOT_FOUND);
   res.json({ message: "Route not found" });
 });
