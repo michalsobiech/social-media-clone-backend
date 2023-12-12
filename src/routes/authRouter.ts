@@ -1,28 +1,28 @@
-import bcrypt from 'bcrypt';
+import bcrypt from "bcrypt";
 import express, {
   type Response,
   type NextFunction,
   type Request,
-} from 'express';
+} from "express";
 import {
   BAD_REQUEST,
   CONFLICT,
   CREATED,
   SUCCESS,
   UNAUTHORIZED,
-} from '../constants/HttpStatusCodes.js';
-import User from '../models/User.js';
-import APIError from '../utils/APIError.js';
+} from "../constants/HttpStatusCodes.js";
+import User from "../models/User.js";
+import APIError from "../utils/APIError.js";
 import {
   isEmailValid,
   isPasswordValid,
   isValidISO,
-} from '../utils/validation.js';
+} from "../utils/validation.js";
 
 const router = express.Router();
 
 router.post(
-  '/register',
+  "/register",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { firstName, lastName, email, password, gender } =
@@ -37,7 +37,7 @@ router.post(
         !birthDate ||
         !gender
       ) {
-        throw new APIError(BAD_REQUEST, 'Missing required fields');
+        throw new APIError(BAD_REQUEST, "Missing required fields");
       }
 
       if (
@@ -47,15 +47,15 @@ router.post(
         !isNaN(parseFloat(password)) ||
         !isValidISO(birthDate)
       ) {
-        throw new APIError(BAD_REQUEST, 'Invalid data type');
+        throw new APIError(BAD_REQUEST, "Invalid data type");
       }
 
       if (!isEmailValid(email) || !isPasswordValid(password)) {
-        throw new APIError(BAD_REQUEST, 'User input is invalid');
+        throw new APIError(BAD_REQUEST, "User input is invalid");
       }
       console.log(email);
       if (await User.exists({ email })) {
-        throw new APIError(CONFLICT, 'Email is taken');
+        throw new APIError(CONFLICT, "Email is taken");
       }
 
       const saltRounds = 12;
@@ -70,39 +70,39 @@ router.post(
         gender,
       });
 
-      res.status(CREATED).send({ message: 'User registered successfully' });
+      res.status(CREATED).send({ message: "User registered successfully" });
     } catch (error) {
       next(error);
     }
   }
 );
 
-router.post('/login', async (req, res, next) => {
+router.post("/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      throw new APIError(BAD_REQUEST, 'Missing required fields');
+      throw new APIError(BAD_REQUEST, "Missing required fields");
     }
 
     if (!isNaN(parseFloat(email)) || !isNaN(parseFloat(password))) {
-      throw new APIError(BAD_REQUEST, 'Invalid data type');
+      throw new APIError(BAD_REQUEST, "Invalid data type");
     }
 
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      throw new APIError(BAD_REQUEST, 'Credentials are invalid');
+      throw new APIError(BAD_REQUEST, "Credentials are invalid");
     }
 
     const bcryptResult = await bcrypt.compare(password, user.hashedPassword);
 
     if (!bcryptResult) {
-      throw new APIError(BAD_REQUEST, 'Credentials are invalid');
+      throw new APIError(BAD_REQUEST, "Credentials are invalid");
     }
 
     if (req.session.userId) {
-      throw new APIError(BAD_REQUEST, 'Already authenticated');
+      throw new APIError(BAD_REQUEST, "Already authenticated");
     } else {
       req.session.regenerate((err) => {
         if (err) return next(err);
@@ -112,7 +112,7 @@ router.post('/login', async (req, res, next) => {
         req.session.save((err) => {
           if (err) return next(err);
 
-          res.status(SUCCESS).send({ message: 'Authenticated successfully' });
+          res.status(SUCCESS).send({ message: "Authenticated successfully" });
         });
       });
     }
@@ -121,17 +121,17 @@ router.post('/login', async (req, res, next) => {
   }
 });
 
-router.post('/logout', async (req, res, next) => {
+router.post("/logout", async (req, res, next) => {
   try {
     if (!req.session.userId) {
-      throw new APIError(BAD_REQUEST, 'No session');
+      throw new APIError(BAD_REQUEST, "No session");
     }
 
     req.session.destroy((err) => {
       if (err) {
         next(err);
       } else {
-        res.status(SUCCESS).send({ message: 'Logged out successfully' });
+        res.status(SUCCESS).send({ message: "Logged out successfully" });
       }
     });
   } catch (error) {
@@ -139,13 +139,13 @@ router.post('/logout', async (req, res, next) => {
   }
 });
 
-router.post('/me', async (req, res, next) => {
+router.post("/me", async (req, res, next) => {
   try {
     if (!req.session.userId) {
-      throw new APIError(UNAUTHORIZED, 'Unauthenticated');
+      throw new APIError(UNAUTHORIZED, "Unauthenticated");
     }
 
-    res.status(SUCCESS).send({ message: 'Authenticated' });
+    res.status(SUCCESS).send({ message: "Authenticated" });
   } catch (error) {
     next(error);
   }
