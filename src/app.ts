@@ -1,5 +1,6 @@
 import MongoStore from "connect-mongo";
 import dotenv from "dotenv";
+import cookieparser from "cookie-parser";
 import express, {
   type Request,
   type Response,
@@ -36,6 +37,7 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieparser());
 app.use(
   session({
     store: new MongoStore({

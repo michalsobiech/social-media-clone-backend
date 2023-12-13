@@ -108,6 +108,7 @@ router.post("/login", async (req, res, next) => {
         if (err) return next(err);
 
         req.session.userId = user.id;
+        res.cookie("userId", user.id, { httpOnly: false, signed: false });
 
         req.session.save((err) => {
           if (err) return next(err);
@@ -131,6 +132,8 @@ router.post("/logout", async (req, res, next) => {
       if (err) {
         next(err);
       } else {
+        res.clearCookie("sid", { path: "/" });
+        res.clearCookie("userId", { path: "/" });
         res.status(SUCCESS).send({ message: "Logged out successfully" });
       }
     });
@@ -139,9 +142,12 @@ router.post("/logout", async (req, res, next) => {
   }
 });
 
-router.post("/me", async (req, res, next) => {
+router.post("/me", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    if (!req.session.userId) {
+    const hasCookies = req.session.userId && req.cookies.userId;
+    const isIdMatching = req.session.userId == req.cookies.userId;
+
+    if (!hasCookies || !isIdMatching) {
       throw new APIError(UNAUTHORIZED, "Unauthenticated");
     }
 
