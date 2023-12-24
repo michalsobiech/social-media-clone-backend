@@ -24,6 +24,11 @@ export default function (
   _res: Response,
   next: NextFunction
 ) {
+  if (process.env.NODE_ENV === "test") {
+    next(error);
+    return;
+  }
+
   if (process.env.NODE_ENV !== "production") {
     console.log(error);
     next(error);
