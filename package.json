@@ -8,7 +8,7 @@
     "dev": "nodemon -q",
     "start": "npm run build && node dist/app.js",
     "build": "rimraf dist && tsc",
-    "prod": "set NODE_ENV=production&& node app.js",
+    "prod": "cross-env NODE_ENV=production node dist/app.js",
     "vercel-build": ""
   },
   "keywords": [],
@@ -33,6 +33,7 @@
     "@types/express": "^4.17.21",
     "@types/express-session": "^1.17.10",
     "@types/node": "^20.10.3",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.1",
