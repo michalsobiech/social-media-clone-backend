@@ -17,16 +17,6 @@ import logger from "./middlewares/logger.js";
 dotenv.config();
 
 const app: Application = express();
-const port = process.env.PORT || 5000;
-
-mongoose
-  .connect(process.env.MONGODB_URI)
-  .then(() => {
-    console.log("Connected");
-  })
-  .catch((error) => {
-    console.log(error);
-  });
 
 app.disable("x-powered-by");
 app.use(
@@ -41,7 +31,7 @@ app.use(cookieparser());
 app.use(
   session({
     store: new MongoStore({
-      mongoUrl: process.env.MONGODB_URI,
+      client: mongoose.connection.getClient(),
       collectionName: "sessions",
       autoRemove: "interval",
       autoRemoveInterval: 10,
@@ -68,7 +58,5 @@ app.use((req: Request, res: Response) => {
 });
 
 app.use(logger, errorHandler);
-
-app.listen(port);
 
 export default app;
