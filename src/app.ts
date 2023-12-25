@@ -30,7 +30,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieparser());
 app.use(
   session({
-    store: new MongoStore({
+    store: MongoStore.create({
       client: mongoose.connection.getClient(),
       collectionName: "sessions",
       autoRemove: "interval",
