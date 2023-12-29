@@ -31,7 +31,9 @@ app.use(cookieparser());
 app.use(
   session({
     store: MongoStore.create({
-      client: mongoose.connection.getClient(),
+      clientPromise: mongoose.connection
+        .asPromise()
+        .then((conn) => conn.getClient()),
       collectionName: "sessions",
       autoRemove: "interval",
       autoRemoveInterval: 10,
