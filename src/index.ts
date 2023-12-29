@@ -7,8 +7,9 @@ const PORT = process.env.PORT;
 
 async function main() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log("Connected to the database");
+    await mongoose.connect(process.env.MONGODB_URI).then(() => {
+      console.log("Connected to the database");
+    });
 
     const { default: app } = await import("./app.js");
 
