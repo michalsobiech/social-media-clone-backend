@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { createApp } from "./app.js";
 
 dotenv.config();
 
@@ -11,7 +12,7 @@ async function main() {
       console.log("Connected to the database");
     });
 
-    const { default: app } = await import("./app.js");
+    const app = createApp();
 
     app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}`);
