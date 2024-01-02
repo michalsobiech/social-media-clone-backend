@@ -53,7 +53,7 @@ router.post(
       if (!isEmailValid(email) || !isPasswordValid(password)) {
         throw new APIError(BAD_REQUEST, "User input is invalid");
       }
-      console.log(email);
+
       if (await User.exists({ email })) {
         throw new APIError(CONFLICT, "Email is taken");
       }
