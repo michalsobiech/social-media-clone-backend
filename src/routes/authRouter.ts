@@ -37,7 +37,11 @@ router.post(
         !birthDate ||
         !gender
       ) {
-        throw new APIError(BAD_REQUEST, "Missing required fields");
+        throw new APIError({
+          status: BAD_REQUEST,
+          title: "Missing data",
+          detail: "Missing required fields",
+        });
       }
 
       if (
@@ -47,15 +51,27 @@ router.post(
         !isNaN(parseFloat(password)) ||
         !isValidISO(birthDate)
       ) {
-        throw new APIError(BAD_REQUEST, "Invalid data type");
+        throw new APIError({
+          status: BAD_REQUEST,
+          title: "Invalid type",
+          detail: "Invalid data type",
+        });
       }
 
       if (!isEmailValid(email) || !isPasswordValid(password)) {
-        throw new APIError(BAD_REQUEST, "User input is invalid");
+        throw new APIError({
+          status: BAD_REQUEST,
+          title: "Invalid data",
+          detail: "User input is invalid",
+        });
       }
 
       if (await User.exists({ email })) {
-        throw new APIError(CONFLICT, "Email is taken");
+        throw new APIError({
+          status: CONFLICT,
+          title: "Email taken",
+          detail: "The email address you want to use is already taken",
+        });
       }
 
       const saltRounds = 12;
@@ -82,27 +98,47 @@ router.post("/login", async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      throw new APIError(BAD_REQUEST, "Missing required fields");
+      throw new APIError({
+        status: BAD_REQUEST,
+        title: "Missing data",
+        detail: "Missing required fields",
+      });
     }
 
     if (!isNaN(parseFloat(email)) || !isNaN(parseFloat(password))) {
-      throw new APIError(BAD_REQUEST, "Invalid data type");
+      throw new APIError({
+        status: BAD_REQUEST,
+        title: "Invalid data",
+        detail: "The data does not meet the requirements",
+      });
     }
 
     const user = await User.findOne({ email: email });
 
     if (!user) {
-      throw new APIError(BAD_REQUEST, "Credentials are invalid");
+      throw new APIError({
+        status: BAD_REQUEST,
+        title: "Invalid credentials",
+        detail: "Credentials are invalid",
+      });
     }
 
     const bcryptResult = await bcrypt.compare(password, user.hashedPassword);
 
     if (!bcryptResult) {
-      throw new APIError(BAD_REQUEST, "Credentials are invalid");
+      throw new APIError({
+        status: BAD_REQUEST,
+        title: "Invalid credentials",
+        detail: "Credentials are invalid",
+      });
     }
 
     if (req.session.userId) {
-      throw new APIError(BAD_REQUEST, "Already authenticated");
+      throw new APIError({
+        status: BAD_REQUEST,
+        title: "Already authenticated",
+        detail: "You are already authenticated",
+      });
     } else {
       req.session.regenerate((err) => {
         if (err) return next(err);
@@ -125,7 +161,11 @@ router.post("/login", async (req, res, next) => {
 router.post("/logout", async (req, res, next) => {
   try {
     if (!req.session.userId) {
-      throw new APIError(BAD_REQUEST, "No session");
+      throw new APIError({
+        status: UNAUTHORIZED,
+        title: "No session",
+        detail: "No session cookie",
+      });
     }
 
     req.session.destroy((err) => {
@@ -148,7 +188,11 @@ router.post("/me", async (req: Request, res: Response, next: NextFunction) => {
     const isIdMatching = req.session.userId == req.cookies.userId;
 
     if (!hasCookies || !isIdMatching) {
-      throw new APIError(UNAUTHORIZED, "Unauthenticated");
+      throw new APIError({
+        status: UNAUTHORIZED,
+        title: "Unauthenticated",
+        detail: "Unauthenticated",
+      });
     }
 
     res.status(SUCCESS).send({ message: "Authenticated" });

@@ -37,13 +37,13 @@ export default function (
 
   const url = `${req.protocol}://${req.hostname}${req.originalUrl}`;
   const info = {
-    statusCode: error.statusCode,
-    message: error.message,
-    label: error.statusCode < 500 ? "API Error" : "Server Error",
+    statusCode: error.status,
+    message: error.error.title,
+    label: error.status < 500 ? "API Error" : "Server Error",
     url: url,
   };
 
-  if (error.statusCode < 500) {
+  if (error.status < 500) {
     logger.info(info);
   } else {
     logger.error(info);

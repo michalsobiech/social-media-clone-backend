@@ -1,20 +1,24 @@
-import { type NextFunction, type Request, type Response } from 'express';
-import { INTERNAL_SERVER_ERROR } from '../constants/HttpStatusCodes.js';
-import APIError from '../utils/APIError.js';
+import { type NextFunction, type Request, type Response } from "express";
+import { INTERNAL_SERVER_ERROR } from "../constants/HttpStatusCodes.js";
+import APIError, { type APIErrorType } from "../utils/APIError.js";
 
 const errorHandler = (
   error: APIError,
-  req: Request,
+  _req: Request,
   res: Response,
   _next: NextFunction
 ) => {
   if (!(error instanceof APIError)) {
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .send({ message: 'Internal Server Error' });
+    const error: APIErrorType = {
+      status: INTERNAL_SERVER_ERROR,
+      title: "Internal Server Error",
+      detail: "An error occurred on the server",
+    };
+
+    return res.status(error.status).send({ error: error });
   }
 
-  return res.status(error.statusCode).send({ message: error.message });
+  return res.status(error.status).send({ error: error.error });
 };
 
 export default errorHandler;
