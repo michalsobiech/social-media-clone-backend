@@ -49,7 +49,8 @@ router.post(
         !isNaN(parseFloat(lastName)) ||
         !isNaN(parseFloat(email)) ||
         !isNaN(parseFloat(password)) ||
-        !isValidISO(birthDate)
+        !isValidISO(birthDate) ||
+        !isNaN(parseFloat(gender))
       ) {
         throw new APIError({
           status: BAD_REQUEST,
