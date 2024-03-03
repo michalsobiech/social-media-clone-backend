@@ -7,6 +7,8 @@ export type APIErrorType = {
   detail: string;
   /** Link to the problem section in the API documentation */
   link?: string;
+  /** Invalid parameters */
+  invalidParams?: { name: string; reason: string }[];
 };
 
 export default class APIError extends Error {
