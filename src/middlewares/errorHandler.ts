@@ -8,6 +8,8 @@ const errorHandler = (
   res: Response,
   _next: NextFunction
 ) => {
+  res.set("content-type", "application/problem+json");
+
   if (!(error instanceof APIError)) {
     const error: APIErrorType = {
       status: INTERNAL_SERVER_ERROR,
@@ -15,10 +17,10 @@ const errorHandler = (
       detail: "An error occurred on the server",
     };
 
-    return res.status(error.status).send({ error: error });
+    return res.status(error.status).send(error);
   }
 
-  return res.status(error.status).send({ error: error.error });
+  return res.status(error.status).send(error.error);
 };
 
 export default errorHandler;
