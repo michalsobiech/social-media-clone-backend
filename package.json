@@ -6,7 +6,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "nodemon -q",
-    "start": "npm run build && node dist/index.js",
+    "start": "node dist/index.js",
     "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" NODE_ENV=test jest",
     "build": "rimraf dist && tsc",
     "prod": "cross-env NODE_ENV=production node dist/app.js"
