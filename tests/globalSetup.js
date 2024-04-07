@@ -13,7 +13,7 @@ export default async function () {
 
     const app = createApp();
     globalThis.__SERVER__ = app.listen(5000);
-    process.env.API_URL = `http://localhost:5000`;
+    process.env.API_URL = `http://localhost:5000/api`;
   } catch (error) {
     console.log(error);
     process.exit(1);
