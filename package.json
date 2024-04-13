@@ -8,7 +8,7 @@
     "dev": "nodemon -q",
     "start": "node dist/index.js",
     "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" NODE_ENV=test jest",
-    "build": "rimraf dist && tsc",
+    "build": "rimraf dist && tsc && tsc-alias",
     "prod": "cross-env NODE_ENV=production node dist/app.js"
   },
   "keywords": [],
@@ -39,6 +39,7 @@
     "nodemon": "^3.0.1",
     "rimraf": "^5.0.5",
     "supertest": "^6.3.3",
+    "tsc-alias": "^1.8.8",
     "tsx": "^4.7.2",
     "typescript": "^5.3.3"
   }
