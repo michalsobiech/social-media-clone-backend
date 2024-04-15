@@ -13,86 +13,11 @@ import {
 } from "../constants/HttpStatusCodes.js";
 import User from "../models/User.js";
 import APIError from "../utils/APIError.js";
-import {
-  isEmailValid,
-  isPasswordValid,
-  isValidISO,
-} from "../utils/validation.js";
+import registerController from "@/controllers/register/controller.js";
 
 const router = express.Router();
 
-router.post(
-  "/register",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { firstName, lastName, email, password, gender } =
-        req.body as Record<string, string>;
-      const birthDate: string = req.body.birthDate;
-
-      if (
-        !firstName ||
-        !lastName ||
-        !email ||
-        !password ||
-        !birthDate ||
-        !gender
-      ) {
-        throw new APIError({
-          status: BAD_REQUEST,
-          title: "Missing data",
-          detail: "Missing required fields",
-        });
-      }
-
-      if (
-        !isNaN(parseFloat(firstName)) ||
-        !isNaN(parseFloat(lastName)) ||
-        !isNaN(parseFloat(email)) ||
-        !isNaN(parseFloat(password)) ||
-        !isValidISO(birthDate) ||
-        !isNaN(parseFloat(gender))
-      ) {
-        throw new APIError({
-          status: BAD_REQUEST,
-          title: "Invalid type",
-          detail: "Invalid data type",
-        });
-      }
-
-      if (!isEmailValid(email) || !isPasswordValid(password)) {
-        throw new APIError({
-          status: BAD_REQUEST,
-          title: "Invalid data",
-          detail: "User input is invalid",
-        });
-      }
-
-      if (await User.exists({ email })) {
-        throw new APIError({
-          status: CONFLICT,
-          title: "Email taken",
-          detail: "The email address you want to use is already taken",
-        });
-      }
-
-      const saltRounds = 12;
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-      await User.create({
-        firstName,
-        lastName,
-        email,
-        hashedPassword,
-        birthDate,
-        gender,
-      });
-
-      res.status(CREATED).send({ message: "User registered successfully" });
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+router.post("/register", registerController);
 
 router.post("/login", async (req, res, next) => {
   try {
