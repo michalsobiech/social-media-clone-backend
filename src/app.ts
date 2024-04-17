@@ -5,6 +5,7 @@ import express, {
   type Request,
   type Response,
   type Application,
+  type NextFunction,
 } from "express";
 import session from "express-session";
 import errorHandler from "./middlewares/errorHandler.js";
@@ -13,6 +14,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import { NOT_FOUND } from "./constants/HttpStatusCodes.js";
 import logger from "./middlewares/logger.js";
+import APIError from "./utils/APIError.js";
 
 dotenv.config();
 
@@ -55,9 +57,14 @@ export function createApp() {
 
   app.use("/api/auth", authRouter);
 
-  app.use((req: Request, res: Response) => {
-    res.status(NOT_FOUND);
-    res.json({ message: "Route not found" });
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    next(
+      new APIError({
+        status: NOT_FOUND,
+        title: "Route not found",
+        detail: "The route you want to access is no existing",
+      })
+    );
   });
 
   app.use(logger, errorHandler);
