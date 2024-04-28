@@ -8,7 +8,7 @@ import {
   isPasswordValid,
   isValidISO,
 } from "@/utils/validation.js";
-import { bodyHasAllRequiredParameters } from "./registerValidation.js";
+import { bodyHasAllRequiredParameters } from "./validators.js";
 
 type RegisterBody = Object & {
   [key: string]: string;

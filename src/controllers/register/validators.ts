@@ -55,9 +55,3 @@ const validateBodyTypes = () => {
 const validateBodyFormat = () => {
   return;
 };
-
-export const registerBodyValidation = (body: RegisterBody) => {
-  // TODO: Parameter completeness
-  // TODO: Parameter type validation
-  // TODO: Parameter format validation
-};
