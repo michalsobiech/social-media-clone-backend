@@ -9,7 +9,7 @@ import express, {
 } from "express";
 import session from "express-session";
 import errorHandler from "./middlewares/errorHandler.js";
-import authRouter from "./routes/authRouter.js";
+import authRouter from "@/routes/auth.js";
 import mongoose from "mongoose";
 import cors from "cors";
 import { NOT_FOUND } from "./constants/HttpStatusCodes.js";
