@@ -5,7 +5,7 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon -q",
+    "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
     "test": "cross-env NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" NODE_ENV=test jest",
     "build": "rimraf dist && tsc && tsc-alias",
