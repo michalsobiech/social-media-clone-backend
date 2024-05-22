@@ -1,5 +1,5 @@
-import { BAD_REQUEST } from "../../constants/HttpStatusCodes.js";
-import APIError from "../../utils/APIError.js";
+import { BAD_REQUEST } from "@/constants/HttpStatusCodes.js";
+import APIError from "@/utils/APIError.js";
 
 export type RegisterBody = {
   [key: string]: string;
